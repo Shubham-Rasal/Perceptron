@@ -10,18 +10,6 @@ class Point {
 let perceptron = new Perceptron(20,0.5);
 
 //make an array of points with correct data i.e training data
-function makePoints(n) {
-    let points = [];
-    for (let i = 0; i < n; i++) {
-        let x = Math.random() * 400;
-        let y = Math.random() * 400;
-        let point = new Point(x, y);
-        point.label = x > y ? 1 : -1;
-
-        points.push(point);
-    }
-    return points;
-}
 
 function makeGuessPoints(n) {
 
@@ -45,7 +33,27 @@ function trainPerceptron(points) {
     });
 }
 
+function f(x)
+{
+    return 9*x;
+}
 
+
+
+
+
+function makePoints(n) {
+    let points = [];
+    for (let i = 0; i < n; i++) {
+        let x = Math.random() * 400;
+        let y = Math.random() * 400;
+        let point = new Point(x, y);
+        point.label = y>f(x) ? 1 : -1;
+
+        points.push(point);
+    }
+    return points;
+}
 
 
 
@@ -56,17 +64,32 @@ canvas.height = 400;
 
 
 //line
+drawLine(0, 0, 1,9 );
+
+const height = 400;
+const width = 400;
+function drawLine(x1, y1, x2, y2)  { 
+
 ctx.beginPath();
-ctx.moveTo(0, 0);
-ctx.lineTo(400, 400);
+ctx.moveTo(x1*400, convertToCartesian(y1*400) );
+ctx.lineTo(x2*400, convertToCartesian(y2*400));
 ctx.stroke();
 // drawGuessPoint();
+}
+
+
+
+
+
+function convertToCartesian(x) {
+    return 400 - x;
+}
 
 
 //function to draw a point 
 function drawPoint(x, y, label) {
     ctx.beginPath();
-    ctx.arc(x, y, 5, 0, 2 * Math.PI);
+    ctx.arc(x, convertToCartesian(y), 5, 0, 2 * Math.PI);
 
     ctx.stroke();
     ctx.fill();
@@ -81,6 +104,8 @@ function drawPoint(x, y, label) {
     }
 
 }
+
+
 
 
 setInterval(() => {
@@ -99,7 +124,7 @@ let points = makePoints(10);
 
 const btn = document.querySelector('button');
 btn.addEventListener('click', () => {
-
+    
 
 trainPerceptron(points);
 });

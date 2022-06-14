@@ -11,7 +11,7 @@ class Perceptron {
         for (let i = 0; i < inputs.length; i++) {
             sum += inputs[i] * this.weights[i];
         }
-        sum += this.bias;
+        sum += this.bias*this.lr;
         return this.activate(sum);
     }
 
@@ -33,3 +33,7 @@ class Perceptron {
         return this.weights;
     }
 }
+
+
+
+
