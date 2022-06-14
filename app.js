@@ -1,5 +1,3 @@
-
-
 class Point {
     constructor(x, y) {
         this.x = x;
@@ -9,29 +7,9 @@ class Point {
 
 }
 
+let perceptron = new Perceptron(20,0.5);
 
-
-let perceptron = new Perceptron(10);
-let points = makePoints(100);
-
-//call perceptron.guess() on each point
-function guess(point) {
-    let inputs = [point.x, point.y];
-    return perceptron.feedForward(inputs);
-}
-
-document.addEventListener("click",(e)=>{
-    console.log(e)
-    points.forEach(point => {
-        perceptron.train([point.x, point.y], point.label);
-                drawGuessPoint();
-    });
-
-})
-
-
-
-//make an array of points
+//make an array of points with correct data i.e training data
 function makePoints(n) {
     let points = [];
     for (let i = 0; i < n; i++) {
@@ -45,28 +23,27 @@ function makePoints(n) {
     return points;
 }
 
+function makeGuessPoints(n) {
 
+    let points = [];
+    for (let i = 0; i < n; i++) {
+        let x = Math.random() * 400;
+        let y = Math.random() * 400;
+        let point = new Point(x, y);
+        point.label = perceptron.feedForward([x, y]);
 
-function makeGuessPoint(n){
-    
-        let points = [];
-        for (let i = 0; i < n; i++) {
-            let x = Math.random() * 400;
-            let y = Math.random() * 400;
-            let point = new Point(x, y);
-            point.label = perceptron.feedForward([x, y]);
-    
-            points.push(point);
-        }
-        return points;
-        
-    
+        points.push(point);
+    }
+    return points;
 
 }
 
 
-let guessPoints = makeGuessPoint(100); 
-
+function trainPerceptron(points) {
+   points.forEach(point => {
+         perceptron.train([point.x, point.y], point.label);
+    });
+}
 
 
 
@@ -74,8 +51,6 @@ let guessPoints = makeGuessPoint(100);
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
-
-
 canvas.width = 400;
 canvas.height = 400;
 
@@ -85,40 +60,46 @@ ctx.beginPath();
 ctx.moveTo(0, 0);
 ctx.lineTo(400, 400);
 ctx.stroke();
+// drawGuessPoint();
 
 
 //function to draw a point 
-function drawPoint(x, y,label) {
+function drawPoint(x, y, label) {
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, 2 * Math.PI);
 
     ctx.stroke();
     ctx.fill();
-    
-       if(label === 1)
-       {
-        ctx.fillStyle="red";
+
+    if (label === 1) {
+        ctx.fillStyle = `rgba(201, 3, 0,1)`;
         ctx.fill();
-       }
-       else {
-        ctx.fillStyle="green";
+    }
+    else {
+        ctx.fillStyle = "green";
         ctx.fill();
-       }
+    }
 
 }
 
-// points.forEach(point => {
-//     drawPoint(point.x, point.y, point.label);
 
-// });
-function drawGuessPoint(){
+setInterval(() => {
+let guessPoints = makeGuessPoints(100);
+guessPoints.forEach(guessPoint => {
+   
+    drawPoint(guessPoint.x, guessPoint.y, guessPoint.label);
+});
+guessPoints = [];
+console.log(perceptron.getWeights());
 
-    guessPoints.forEach(point => {
-        drawPoint(point.x, point.y, point.label);
-    
-    });
-}
-
-
+}, 300);
 
 
+let points = makePoints(10);
+
+const btn = document.querySelector('button');
+btn.addEventListener('click', () => {
+
+
+trainPerceptron(points);
+});
