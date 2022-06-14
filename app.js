@@ -1,42 +1,4 @@
 
-class Perceptron{
-    constructor(inputs, weights, bias){
-        this.inputs = inputs;
-        this.weights = weights;
-        this.bias = bias;
-
-    }
-
-     weightedSum(inputs, weights){
-        let sum = 0;
-        for(let i = 0; i < 2; i++){
-            sum += inputs[i] * weights[i];
-        }
-        return sum;
-    }
-    
-    
-     activate(sum)
-    {
-        return sum > 0 ? 1 : -1;
-    }
-    
-     
-      guess(){
-        let sum = this.weightedSum(this.inputs, this.weights);
-        return this.activate(sum + this.bias);
-    }
-    
-    
- 
-   
-    
-}
-
-
-let p = new Perceptron([1,9.5], [1,1], 0);
-console.log(p.guess())
-
 
 class Point {
     constructor(x, y) {
@@ -44,33 +6,40 @@ class Point {
         this.y = y;
         this.label = null;
     }
+
 }
 
 
 
-let w1 = 0 ,w2 = 0;
-let weights = {w1,w2};
+let perceptron = new Perceptron(10);
+let points = makePoints(100);
 
-
-//label each point as above or below the line   
-function labelPoint(point){
-    if(point.y < point.x){
-        point.label = "above";
-    }
-    else{
-        point.label = "below";
-    }
+//call perceptron.guess() on each point
+function guess(point) {
+    let inputs = [point.x, point.y];
+    return perceptron.feedForward(inputs);
 }
+
+document.addEventListener("click",(e)=>{
+    console.log(e)
+    points.forEach(point => {
+        perceptron.train([point.x, point.y], point.label);
+                drawGuessPoint();
+    });
+
+})
+
 
 
 //make an array of points
-function makePoints(n){
+function makePoints(n) {
     let points = [];
-    for(let i = 0; i < n; i++){
-        let x = Math.random() * window.innerWidth;
-        let y = Math.random() * window.innerHeight;
+    for (let i = 0; i < n; i++) {
+        let x = Math.random() * 400;
+        let y = Math.random() * 400;
         let point = new Point(x, y);
-        labelPoint(point);
+        point.label = x > y ? 1 : -1;
+
         points.push(point);
     }
     return points;
@@ -78,25 +47,32 @@ function makePoints(n){
 
 
 
-const points = makePoints(10);
-console.log(points);
+function makeGuessPoint(n){
+    
+        let points = [];
+        for (let i = 0; i < n; i++) {
+            let x = Math.random() * 400;
+            let y = Math.random() * 400;
+            let point = new Point(x, y);
+            point.label = perceptron.feedForward([x, y]);
+    
+            points.push(point);
+        }
+        return points;
+        
+    
+
+}
+
+
+let guessPoints = makeGuessPoint(100); 
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-const canvas =  document.querySelector('#canvas');
+const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 
 
@@ -106,35 +82,43 @@ canvas.height = 400;
 
 //line
 ctx.beginPath();
-ctx.moveTo(0,0);
-ctx.lineTo(400,400);
+ctx.moveTo(0, 0);
+ctx.lineTo(400, 400);
 ctx.stroke();
 
 
 //function to draw a point 
-function drawPoint(x,y){
+function drawPoint(x, y,label) {
     ctx.beginPath();
-    ctx.arc(x,y,5,0,2*Math.PI);
+    ctx.arc(x, y, 5, 0, 2 * Math.PI);
 
     ctx.stroke();
     ctx.fill();
-//    if(x>y)
-//    {
-//     ctx.fillStyle="red";
-//     ctx.fill();
-//    }
-//    else{
-//     ctx.fillStyle="green";
-//     ctx.fill();
-//    }
+    
+       if(label === 1)
+       {
+        ctx.fillStyle="red";
+        ctx.fill();
+       }
+       else {
+        ctx.fillStyle="green";
+        ctx.fill();
+       }
 
 }
 
-for(let i=0;i<100;i++){
-    let x = Math.random()*canvas.width;
-    let y = Math.random()*canvas.height;
-    drawPoint(x,y);
+// points.forEach(point => {
+//     drawPoint(point.x, point.y, point.label);
+
+// });
+function drawGuessPoint(){
+
+    guessPoints.forEach(point => {
+        drawPoint(point.x, point.y, point.label);
+    
+    });
 }
+
 
 
 
