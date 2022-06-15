@@ -134,7 +134,7 @@ function drawPoint(x, y, label) {
     ctx.fill();
 
     if (label === 1) {
-        ctx.fillStyle = `rgba(201, 3, 0,0.3)`;
+        ctx.fillStyle = `rgba(255, 0, 0,0.3)`;
         ctx.fill();
     }
     else {
