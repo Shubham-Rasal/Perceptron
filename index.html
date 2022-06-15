@@ -6,6 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perceptron Implemetation in Javascript</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
 </head>
 
 <body>
@@ -14,13 +17,26 @@
         <canvas id="canvas"></canvas>
     </div>
 
-    <button id= "train"  >train</button>
+    <button class="btn btn-warning m-1" id="train">train</button>
+
+    <div class="slidecontainer">
+        <input type="range" min="10" max="100" value="100" class="slider" id="myRange" />
+        <div class="demo" id="demo"></div>
+    </div>
+    <div class="xContainer">
+        <input type="range" min="10" max="100" value="100" class="slider" id="xRange" />
+        <div class="xdem0" id="xdemo"></div>
+    </div>
+
+    <div class="start">
+        <button type="button" class="btn btn-success start" id="start">Start</button>
+    </div>
 
 
 
     <style>
         .container {
-            width: 100%;
+            width: 90%;
             height: 100%;
             display: flex;
             justify-content: center;
@@ -31,10 +47,70 @@
         #canvas {
             border: 2px solid black;
         }
-    </style>
 
-    <script src="perceptron.js"></script>
-    <script src="app.js"></script>
+        .slidecontainer {
+            width: 60%;
+            /* Width of the outside container */
+        }
+
+        /* The slider itself */
+        .slider {
+            -webkit-appearance: none;
+            /* Override default CSS styles */
+            appearance: none;
+            width: 60%;
+            /* Full-width */
+            height: 14px;
+            /* Specified height */
+            background: #d3d3d3;
+            /* Grey background */
+            outline: none;
+            /* Remove outline */
+            opacity: 0.7;
+            /* Set transparency (for mouse-over effects on hover) */
+            -webkit-transition: .2s;
+            /* 0.2 seconds transition on hover */
+            transition: opacity .2s;
+        }
+
+        /* Mouse-over effects */
+        .slider:hover {
+            opacity: 1;
+            /* Fully shown on mouse-over */
+        }
+
+        /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            /* Override default look */
+            appearance: none;
+            width: 25px;
+            /* Set a specific slider handle width */
+            height: 25px;
+            /* Slider handle height */
+            background: #04AA6D;
+            /* Green background */
+            cursor: pointer;
+            /* Cursor on hover */
+        }
+
+        .slider::-moz-range-thumb {
+            width: 25px;
+            /* Set a specific slider handle width */
+            height: 25px;
+            /* Slider handle height */
+            background: #04AA6D;
+            /* Green background */
+            cursor: pointer;
+            /* Cursor on hover */
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+
+<script src="perceptron.js"></script>
+<script src="app.js"></script>
 </body>
 
 </html>

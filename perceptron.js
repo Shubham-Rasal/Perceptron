@@ -24,7 +24,7 @@ class Perceptron {
         let guess = this.feedForward(inputs);
         let error = target - guess;
         for (let i = 0; i < this.weights.length; i++) {
-            this.weights[i] += error * inputs[i]*this.lr;
+            this.weights[i] += error * inputs[i];
         }
         this.bias += error;
     }

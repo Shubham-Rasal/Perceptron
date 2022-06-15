@@ -6,8 +6,43 @@ class Point {
     }
 
 }
+let globalX = 1, globalY = 1;
 
-let perceptron = new Perceptron(20,0.5);
+//slider
+var slider = document.getElementById("myRange");
+var outputY = document.getElementById("demo");
+outputY.innerHTML = slider.value; // Display the default slider value
+
+
+
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function () {
+    outputY.innerHTML = this.value;
+    //   console.log(this.value);
+    globalY = this.value / 10;
+    //   console.log(globalY)
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawLine(0, 0, globalX, globalY);
+}
+
+var sliderX = document.getElementById("xRange");
+var output = document.getElementById("xdemo");
+output.innerHTML = sliderX.value;
+
+
+sliderX.oninput = function () {
+    output.innerHTML = this.value;
+    console.log(this.value);
+    globalX = this.value / 10;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawLine(0, 0, globalX, globalY);
+}
+
+
+let perceptron = new Perceptron(20, 0.5);
+
 
 //make an array of points with correct data i.e training data
 
@@ -28,18 +63,21 @@ function makeGuessPoints(n) {
 
 
 function trainPerceptron(points) {
-   points.forEach(point => {
-         perceptron.train([point.x, point.y], point.label);
+    
+    points.forEach(point => {
+        perceptron.train([point.x, point.y], point.label);
+
     });
-}
 
-function f(x)
-{
-    return 9*x;
 }
 
 
+function f(x) {
+    let slope = globalY / globalX;
+    console.log(slope);
+    return slope * x;
 
+}
 
 
 function makePoints(n) {
@@ -48,7 +86,8 @@ function makePoints(n) {
         let x = Math.random() * 400;
         let y = Math.random() * 400;
         let point = new Point(x, y);
-        point.label = y>f(x) ? 1 : -1;
+
+        point.label = y > f(x) ? 1 : -1;
 
         points.push(point);
     }
@@ -64,17 +103,17 @@ canvas.height = 400;
 
 
 //line
-drawLine(0, 0, 1,9 );
+
 
 const height = 400;
 const width = 400;
-function drawLine(x1, y1, x2, y2)  { 
+function drawLine(x1, y1, x2, y2) {
 
-ctx.beginPath();
-ctx.moveTo(x1*400, convertToCartesian(y1*400) );
-ctx.lineTo(x2*400, convertToCartesian(y2*400));
-ctx.stroke();
-// drawGuessPoint();
+    ctx.beginPath();
+    ctx.moveTo(x1 * 400, convertToCartesian(y1 * 400));
+    ctx.lineTo(x2 * 400, convertToCartesian(y2 * 400));
+    ctx.stroke();
+    // drawGuessPoint();
 }
 
 
@@ -95,11 +134,11 @@ function drawPoint(x, y, label) {
     ctx.fill();
 
     if (label === 1) {
-        ctx.fillStyle = `rgba(201, 3, 0,1)`;
+        ctx.fillStyle = `rgba(201, 3, 0,0.5)`;
         ctx.fill();
     }
     else {
-        ctx.fillStyle = "green";
+        ctx.fillStyle = "rgba(2,164,16,0.5)";
         ctx.fill();
     }
 
@@ -107,24 +146,39 @@ function drawPoint(x, y, label) {
 
 
 
-
-setInterval(() => {
-let guessPoints = makeGuessPoints(100);
-guessPoints.forEach(guessPoint => {
-   
-    drawPoint(guessPoint.x, guessPoint.y, guessPoint.label);
-});
-guessPoints = [];
-console.log(perceptron.getWeights());
-
-}, 300);
-
-
-let points = makePoints(10);
-
 const btn = document.querySelector('button');
 btn.addEventListener('click', () => {
     
-
-trainPerceptron(points);
+    let points = makePoints(100);
+    trainPerceptron(points);
+    ctx.clearRect(0, 0, canvas.height, canvas.width);
+    drawLine(0, 0, globalX, globalY);
 });
+
+
+
+
+
+const startBtn = document.getElementById('start');
+startBtn.addEventListener('click', (e) => {
+
+
+    console.log('start');
+    ctx.clearRect(0, 0, canvas.height, canvas.width);
+    drawLine(0, 0, globalX, globalY);
+    setInterval(() => {
+        let guessPoints = makeGuessPoints(100);
+        guessPoints.forEach(guessPoint => {
+
+            drawPoint(guessPoint.x, guessPoint.y, guessPoint.label);
+        });
+        console.log(perceptron.getWeights());
+        
+       
+
+
+    }, 1000);
+})
+
+
+// drawLine(0, 0,x,y );
