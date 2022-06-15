@@ -166,7 +166,13 @@ startBtn.addEventListener('click', (e) => {
     console.log('start');
     ctx.clearRect(0, 0, canvas.height, canvas.width);
     drawLine(0, 0, globalX, globalY);
+    let interations = 0
     setInterval(() => {
+        interations++;
+        if(interations > 100){
+            clearInterval(interval);
+        }
+
         let guessPoints = makeGuessPoints(100);
         guessPoints.forEach(guessPoint => {
 
